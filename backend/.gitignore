@@ -1,4 +1,4 @@
-.idea/
+.env
 .vscode/
 __pycache__/
 .tox/
@@ -7,5 +7,4 @@ __pycache__/
 htmlcov/
 docs/_build/
 dist/
-.env
 /projectvenv
