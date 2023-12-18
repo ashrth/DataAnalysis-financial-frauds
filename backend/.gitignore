@@ -1,7 +1,7 @@
 instance/
 .cache
 build
-projectvenv
+.projectvenv
 .env
 lib/
 __pycache__
