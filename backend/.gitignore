@@ -1,0 +1,7 @@
+instance/
+.cache
+build
+projectenv/
+.env
+lib/
+__pycache__
