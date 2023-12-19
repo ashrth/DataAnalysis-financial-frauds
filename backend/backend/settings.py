@@ -38,9 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Manually added
-    'mainDAS'
-    'authDAS'
+    # Manually added apps
+    'mainDAS',
+    'authDAS',
+
+    # Manually added dependency
+    'corsheaders',
     'rest_framework'
 ]
 
@@ -53,6 +56,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+CORS_ALLOWED_ORIGINS = [
+
+    'http://localhost:3000',
+
+]
+
+
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'backend.urls'
 
