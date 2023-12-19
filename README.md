@@ -1,4 +1,6 @@
 # RJPOLICE_HACK_496_SecureSniper_7
 
-Use yarn as the package manager
+## Flow Diagram:
 
+
+![Alt text](image-1.png)

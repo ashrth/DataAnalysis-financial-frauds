@@ -1,0 +1,5 @@
+User validation will be done in frontend, this includes;
+1. valid email
+2. password strength
+3. captcha (if required)
+4. user agreement with terms and conditions

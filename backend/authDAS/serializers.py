@@ -7,23 +7,29 @@ UserModel = get_user_model()
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    first_name=serializers.CharField()
-    last_name=serializers.CharField()
-    email = serializers.Charfield()
-    password = serializers.CharField()
+    class Meta:
+        model = UserModel
+        fields = '__all__'
 
+    def create(self, clean_data):
+        user_obj= UserModel.objects.create(
+            first_name= clean_data['first_name'],
+            last_name=clean_data['last_name'] ,
+            email=clean_data['email'],
+            
+        )
+        user_obj.set_password(clean_data['password'])
+        user_obj.save()
+        return user_obj
+        
 
-    def create():
-        pass
-    
 
 class LoginSerializers(serializers.ModelSerializer):
-    email=serializers.EmailField()
-    password=serializers.CharField()
-
+    email = serializers.EmailField()
+    password = serializers.CharField()
 
 
 class ViewSerializers(serializers.ModelSerializer):
     class Meta:
-        model= UserModel
-        exclude=['password']
+        model = UserModel
+        exclude = ['password']
