@@ -11,6 +11,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = UserModel
         fields = '__all__'
 
+
+    def validate():
+        pass
+
     def create(self, clean_data):
         user_obj= UserModel.objects.create(
             first_name= clean_data['first_name'],
