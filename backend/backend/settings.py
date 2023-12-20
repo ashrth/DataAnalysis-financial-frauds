@@ -96,7 +96,12 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'djongo',
-        'NAME': '<your-database-name>',
+        'NAME': 'UserDAS',
+        'CLIENT': {
+            'host': 'mongodb+srv://kushagra3288:ElrRHrRnhHSY4TzT@cluster0.xh13rpk.mongodb.net/',
+            'username': 'kushagra3288',
+            'password': 'ElrRHrRnhHSY4TzT'
+        }
     }
 }
 
