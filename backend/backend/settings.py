@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
 import os
 load_dotenv()
 
@@ -100,9 +101,9 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'UserDAS',
         'CLIENT': {
-            'host': 'uri here',
-            'username': 'username',
-            'password': 'password'
+            'host': os.environ.get('MONGO_URI'),
+            'username': os.environ.get('username'),
+            'password': os.environ.get('password')
         }
     }
 }
