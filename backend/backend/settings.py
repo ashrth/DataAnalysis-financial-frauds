@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -96,15 +97,19 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'djongo',
-        'NAME': 'UserDAS',
         'CLIENT': {
+            'name': os.environ.get('DATABASE_NAME'),
             'host': os.environ.get('MONGO_URI'),
-            'username': os.environ.get('username'),
-            'password': os.environ.get('password')
+            'username': os.environ.get('DB_USERNAME'),
+            'password': os.environ.get('DB_PASSWORD'),
+            'authMechanism': 'SCRAM-SHA-1'
+
         }
+
+
+
+
     }
 }
 
@@ -147,5 +152,6 @@ STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
