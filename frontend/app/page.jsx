@@ -1,8 +1,10 @@
-// TODO
-const Homepage = () => {
-  return (
-    <div>Homepage</div>
-  )
-}
+import Sidenav from "./Sidenav";
 
-export default Homepage
+function App()
+{
+    return <>
+    <Sidenav />
+    </>;
+}
+export default App()
+
