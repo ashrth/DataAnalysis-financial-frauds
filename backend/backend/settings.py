@@ -48,7 +48,8 @@ INSTALLED_APPS = [
 
     # Manually added dependency
     'corsheaders',
-    'rest_framework'
+    'rest_framework',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -155,3 +156,5 @@ STATIC_URL = 'static/'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
