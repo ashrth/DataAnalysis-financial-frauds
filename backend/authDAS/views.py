@@ -11,7 +11,6 @@ import os
 from django.contrib.auth import get_user_model
 from dotenv import load_dotenv
 load_dotenv()
-from django.contrib.auth import authenticate
 from .validation import custom_validate, validate_password, validate_email
 # Create your views here.
 
@@ -47,10 +46,8 @@ class LoginView(APIView):
         assert validate_password(data)
         serializer = LoginSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
-            email = serializer.validated_data['email']
-            password = serializer.validated_data['password']
-            user = authenticate(email=email, password= password)
-            print("user here", user)
+            user = serializer.check_user(data)
+            
             if user.is_active:
                 access_token = generate_tokens(user)
                 response = Response()
@@ -82,7 +79,7 @@ class LogoutView(APIView):
             return response
         response = Response()
         response.data = {
-            'message': "User is already registered"
+            'message': "User is already logged out"
         }
 
         return response

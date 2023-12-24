@@ -53,6 +53,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -98,21 +99,28 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
-        'CLIENT': {
-            'name': os.environ.get('DATABASE_NAME'),
-            'host': os.environ.get('MONGO_URI'),
-            'username': os.environ.get('DB_USERNAME'),
-            'password': os.environ.get('DB_PASSWORD'),
-            'authMechanism': 'SCRAM-SHA-1'
-
-        }
-
-
-
-
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': os.environ.get('DATABASE_NAME'),
+#         'CLIENT': {
+#             'host': os.environ.get('MONGO_URI'),
+#             'username': os.environ.get('DB_USERNAME'),
+#             'password': os.environ.get('DB_PASSWORD'),
+#             'authMechanism': 'SCRAM-SHA-1'
+
+#         }
+
+
+
+
+#     }
+# }
 
 
 # Password validation
@@ -157,4 +165,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+AUTH_USER_MODEL = 'authDAS.User'

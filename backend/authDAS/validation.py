@@ -17,10 +17,6 @@ def custom_validate(data):
     if not password or len(password) < 9:
         raise ValidationError('Password must be at least 8 characters long')
 
-    """Need to check if UserModel.objects.filter(username).exists(): 
-    will check username for current user or the entire user table to see if none of user has same username"""
-
-
     return data
 
 
