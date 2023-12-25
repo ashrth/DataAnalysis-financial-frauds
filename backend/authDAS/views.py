@@ -1,3 +1,4 @@
+from .validation import custom_validate, validate_password, validate_email
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -11,7 +12,6 @@ import os
 from django.contrib.auth import get_user_model
 from dotenv import load_dotenv
 load_dotenv()
-from .validation import custom_validate, validate_password, validate_email
 # Create your views here.
 
 
@@ -20,10 +20,10 @@ class RegisterView(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
-        
+
         clean_data = custom_validate(data=request.data)
-        
-        serializer = RegisterSerializer(data= clean_data)
+
+        serializer = RegisterSerializer(data=clean_data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.create(clean_data)
             if user:
@@ -36,6 +36,7 @@ class RegisterView(APIView):
 
         return Response({'message': 'Something went wrong while registering'}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class LoginView(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (AllowAny,)
@@ -47,7 +48,7 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.check_user(data)
-            
+
             if user.is_active:
                 access_token = generate_tokens(user)
                 response = Response()
@@ -62,6 +63,7 @@ class LoginView(APIView):
             'status': 400,
             'message': 'Login failed'
         })
+
 
 class LogoutView(APIView):
     authentication_classes = (TokenAuthentication,)
@@ -83,6 +85,7 @@ class LogoutView(APIView):
         }
 
         return response
+
 
 class UserView(APIView):
     authentication_classes = (TokenAuthentication,)

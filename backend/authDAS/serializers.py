@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model, authenticate
 
 
 UserModel = get_user_model()
-print("here is the user model", UserModel)
+
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -21,7 +21,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         user_obj.set_password(clean_data['password'])
         user_obj.save()
-        print('here is the details', user_obj)
+        
         return user_obj
 
 
