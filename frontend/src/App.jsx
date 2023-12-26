@@ -29,15 +29,14 @@ function App() {
                 <Route path="/sign-up" element={<h1>sign-up</h1>} />
                 <Route path="/sign-in" element={<h1>in</h1>} />
                 <Route element={
-                  <AuthProtection>
+              
                     <Outlet />
-                  </AuthProtection>
                 }>
                   <Route path="/" element={<Navigate to="/dashboard" />} />
                   <Route path="/chat" element={<h1>chat</h1>} />
                   <Route path="/track-account/:id" element={<TrackAccount />} />
                   <Route path="/CSV" element={<CSV />} />
-                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/bar" element={<Bar />} />
                   <Route path="/pie" element={<Pie />} />
                   <Route path="/line" element={<Line />} />

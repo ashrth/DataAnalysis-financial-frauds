@@ -98,7 +98,7 @@ export default function FileUploader({headers}) {
   return (
     <div className="flex flex-col gap-y-2">
         <Input type="file" accept=".csv" onChange={handleChange} disabled={isLoading} />
-        <Button className='w-[150px] rounded-lg bg-black text-white' onClick={handleSubmit} loading={isLoading} >Submit</Button>
+        <Button className='w-[150px] rounded-lg bg-black text-white' onClick={handleSubmit} loading={isLoading} > Submit</Button>
     </div>
   )
 }

@@ -10,13 +10,7 @@ import { AccountsProvider } from './hooks/useAccounts.js';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <ConfigProvider theme={ANTD_THEME}>
-        <AuthProvider>
-          <AccountsProvider>
-            <App />
-          </AccountsProvider>
-        </AuthProvider>
-      </ConfigProvider>
+    <App/>
     </BrowserRouter>
   </React.StrictMode>,
 )
