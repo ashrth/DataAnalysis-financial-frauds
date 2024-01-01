@@ -1,4 +1,4 @@
-# RJPOLICE_HACK_496_SecureSniper_7
+# RJPOLICE_HACK_496_SecureSnipers_7
 
 ## Flow Diagram:
 
