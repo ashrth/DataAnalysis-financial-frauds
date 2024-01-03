@@ -8,3 +8,8 @@ class FlaggedAccount(models.Model):
     
     ''''''
 
+class FraudAlert(models.Model):
+    fraud_account = models.CharField(max_length=50)
+    confirming_station =  models.CharField(max_length=50)
+    details = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
