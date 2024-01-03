@@ -13,12 +13,16 @@ export default {
       },
       colors: {
         error: '#e29578',
-        primary: '#006d77',
-        secondary: '#89c8c0',
+        primary: '#EBA930',
+        secondary: '#FFE870',
         success: '#83c5be',
         warning: '#ffddd2',
-        primaryGreen: '#006d77',
-        greyish: '#616670',
+        dark: '#000000',
+        supportingGrey: '#6D6D6D',
+        warningRed: '#9B0000',
+        risingGreen: '#2E6B75',
+        settingOrange: '#DA7F00',
+        linkingBlue: '#0036A7'
       },
       borderColor: {
         input: '#7b7b7b',

@@ -5,12 +5,16 @@ import {AuthProvider} from './hooks/useAuth.js';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx'
 import './main.css'
-import { AccountsProvider } from './hooks/useAccounts.js';
+import { ANTD_THEME } from './styles/theme.js';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-    <App/>
+      <ConfigProvider theme={ANTD_THEME}>
+        <AuthProvider>
+          <App/>
+        </AuthProvider>
+      </ConfigProvider>
     </BrowserRouter>
   </React.StrictMode>,
 )

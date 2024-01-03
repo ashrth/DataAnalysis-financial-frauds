@@ -7,9 +7,19 @@ export function useAuth() {
     name: 'Kushagra'
   })
 
+  const login = ()=>{
+    
+  }
+
+  const logout = ()=>{
+
+  }
+
   return {
     authVerificationInProgress: isLoading,
     user,
+    login,
+    logout
   }
 }
 

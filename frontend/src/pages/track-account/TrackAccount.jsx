@@ -61,7 +61,7 @@ export default function TrackAccount() {
         }
       />
 
-      <div className="h-[70%] w-[95%] mx-auto">
+      <div className="h-[90vh] w-[95%] mx-auto">
         {selectedSection === STATES.OVERVIEW && <Overview account={account} />}
         {selectedSection === STATES.MONEYFLOW && <MoneyFlow account={account} />}
       </div>

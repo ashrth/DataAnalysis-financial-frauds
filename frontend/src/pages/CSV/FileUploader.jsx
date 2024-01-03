@@ -2,9 +2,8 @@
 import { Button, Input } from "antd";
 import { useState } from "react";
 import axios from 'axios';
-import Papa from 'papaparse';
 
-export default function FileUploader({headers}) {
+export default function FileUploader() {
 
     const [isLoading, setIsLoading] = useState(false);
     const [file, setFile] = useState();
@@ -15,7 +14,7 @@ export default function FileUploader({headers}) {
         }
     }
 
-    const handleSubmit = ()=>{
+    const handleSubmit = async()=>{
         if (!file) {
             // toast.error(`Please Select a File`, {
             //   style: toastStyle,
@@ -24,81 +23,85 @@ export default function FileUploader({headers}) {
           }
           setIsLoading(true);
           if (file) {
-            Papa.parse(file, {
-            header: true,
-            dynamicTyping: true,
-            skipEmptyLines: true,
-            complete: async (result) => {
-                if (result.data.length == 0) {
-                //   toast.error(`Records not found`, {
-                //     style: toastStyle,
-                //   });
-                  console.log('Empty file');
-                  setIsLoading(false);
-                  return;
-                }
+            setTimeout(async()=>{
+              await axios.post('http://localhost:3000');
+              setIsLoading(false);
+            },2000)
+            // Papa.parse(file, {
+            // header: true,
+            // dynamicTyping: true,
+            // skipEmptyLines: true,
+            // complete: async (result) => {
+            //     if (result.data.length == 0) {
+            //     //   toast.error(`Records not found`, {
+            //     //     style: toastStyle,
+            //     //   });
+            //       console.log('Empty file');
+            //       setIsLoading(false);
+            //       return;
+            //     }
       
-                console.log(result);
+            //     console.log(result);
 
-                let recievedHeaders = Object.keys(
-                  result.data[0],
-                );
+            //     let recievedHeaders = Object.keys(
+            //       result.data[0],
+            //     );
       
-                if (recievedHeaders.length === 0) {
-                  console.log('No records');
-                  setIsLoading(false);
-                  return;
-                }
+            //     if (recievedHeaders.length === 0) {
+            //       console.log('No records');
+            //       setIsLoading(false);
+            //       return;
+            //     }
       
-                const valid = headers.every((header) =>
-                  recievedHeaders.includes(header),
-                );
-                console.log(valid);
-                if (!valid) {
-                //   toast.error(`File Invalid, Headers not found`, {
-                //     style: toastStyle,
-                //   });
-                  setIsLoading(false);
-                  return;
-                }
-                const formData = new FormData();
+            //     const valid = headers.every((header) =>
+            //       recievedHeaders.includes(header),
+            //     );
+            //     console.log(valid);
+            //     if (!valid) {
+            //     //   toast.error(`File Invalid, Headers not found`, {
+            //     //     style: toastStyle,
+            //     //   });
+            //       setIsLoading(false);
+            //       return;
+            //     }
+            //     const formData = new FormData();
 
-                formData.append('file', file);
-                try {
-                  console.log('uploading...');
-                  const response = await axios.post(
-                    '/api/inventory/import',
-                    formData,
-                    {
-                      headers: {
-                        'Content-Type': 'multipart/form-data',
-                      },
-                    },
-                  );
-                  console.log(response.data);
-                  if (response?.status === 200) {
-                    // toast.success(`File uploaded successfully.`, {
-                    //   style: toastStyle,
-                    // });
-                  }
-                  setIsLoading(false);
-                } catch (error) {
-                  console.error('Error uploading file:', error);
-                  setIsLoading(false);
-                }
-              },
-              error: (error) => {
-                console.error('Error parsing CSV:', error);
-                setIsLoading(false);
-              },
-            });
+            //     formData.append('file', file);
+            //     try {
+            //       console.log('uploading...');
+            //       const response = await axios.post(
+            //         '/api/inventory/import',
+            //         formData,
+            //         {
+            //           headers: {
+            //             'Content-Type': 'multipart/form-data',
+            //           },
+            //         },
+            //       );
+            //       console.log(response.data);
+            //       if (response?.status === 200) {
+            //         // toast.success(`File uploaded successfully.`, {
+            //         //   style: toastStyle,
+            //         // });
+            //       }
+            //       setIsLoading(false);
+            //     } catch (error) {
+            //       console.error('Error uploading file:', error);
+            //       setIsLoading(false);
+            //     }
+            //   },
+            //   error: (error) => {
+            //     console.error('Error parsing CSV:', error);
+            //     setIsLoading(false);
+            //   },
+            // });
         }
     }
 
   return (
     <div className="flex flex-col gap-y-2">
         <Input type="file" accept=".csv" onChange={handleChange} disabled={isLoading} />
-        <Button className='w-[150px] rounded-lg bg-black text-white' onClick={handleSubmit} loading={isLoading} > Submit</Button>
+        <Button className='w-[150px] rounded-lg bg-black text-white' onClick={handleSubmit} loading={isLoading} >Submit</Button>
     </div>
   )
 }

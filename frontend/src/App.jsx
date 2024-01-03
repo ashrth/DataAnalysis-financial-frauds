@@ -1,52 +1,61 @@
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import AuthProtection from './components/auth-protection';
 import TrackAccount from './pages/track-account';
 import CSV from './pages/CSV';
-import { useState } from "react";
-import Topbar from "./scenes/global/Topbar";
-import Sidebar from "./scenes/global/Sidebar";
-import Dashboard from "./scenes/dashboard";
-import Bar from "./scenes/bar";
-import Line from "./scenes/line";
-import Pie from "./scenes/pie";
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import { ColorModeContext, useMode } from "../src/styles/theme";
+import Dashboard from "./pages/dashboard";
+import Chat from './pages/chat';
+import { AccountsProvider } from './hooks/useAccounts';
+import AuthProtection from './components/auth-protection/auth-protection';
+import AppShell from './layout/Topbar';
+import { Suspense } from 'react';
+import { Spin, theme } from 'antd';
+import PageLayout from './layout/Sidebar';
+
+const { useToken } = theme
 
 function App() {
-  const [theme, colorMode] = useMode();
-  const [isSidebar, setIsSidebar] = useState(true);
+  const { token } = useToken()
 
   return (
-    <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <div className="app">
-          <Sidebar isSidebar={isSidebar} />
-          <main className="content">
-            <Topbar setIsSidebar={setIsSidebar} />
-            <div className='w-full h-full'>
-              <Routes>
-                <Route path="/sign-up" element={<h1>sign-up</h1>} />
-                <Route path="/sign-in" element={<h1>in</h1>} />
-                <Route element={
-              
-                    <Outlet />
-                }>
-                  <Route path="/" element={<Navigate to="/dashboard" />} />
-                  <Route path="/chat" element={<h1>chat</h1>} />
-                  <Route path="/track-account/:id" element={<TrackAccount />} />
-                  <Route path="/CSV" element={<CSV />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/bar" element={<Bar />} />
-                  <Route path="/pie" element={<Pie />} />
-                  <Route path="/line" element={<Line />} />
-                </Route>
-              </Routes>
-            </div>
-          </main>
-        </div>
-      </ThemeProvider>
-    </ColorModeContext.Provider>
+    <div>
+      <Routes>
+        <Route
+          element={
+            <AppShell>
+              <Suspense
+                fallback={
+                  <div className="flex h-screen items-center justify-center">
+                    <Spin tip={'Loading...'} style={{ color: token.colorPrimary }} />
+                  </div>
+                }
+              >
+                <Outlet />
+              </Suspense>
+            </AppShell>
+          }
+        >
+          <Route path="/sign-up" element={<h1>sign-up</h1>} />
+          <Route path="/sign-in" element={<h1>in</h1>} />
+          <Route element={
+            <AccountsProvider>
+              <AuthProtection>
+                <PageLayout>
+                  <Outlet />
+                </PageLayout>
+              </AuthProtection>
+            </AccountsProvider>
+          }>
+            <Route path="/" element={<Navigate to="/dashboard" />} />
+            <Route path="/chat" element={<Chat />} />
+            <Route path="/track-account/:id" element={<TrackAccount />} />
+            <Route path="/CSV" element={<CSV />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            {/* <Route path="/bar" element={<Bar />} />
+            <Route path="/pie" element={<Pie />} />
+            <Route path="/line" element={<Line />} /> */}
+          </Route>
+        </Route>
+      </Routes>
+    </div>
   );
 }
 
