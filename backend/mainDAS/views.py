@@ -1,37 +1,45 @@
 from rest_framework import status
 import csv
+from rest_framework.views import APIView
 from rest_framework.response import Response
 
 
 # Analysing transactions:
-def analyze_transaction():
-    pass
+class TransactionAnalyzer(APIView):
+
+    def analyze_transaction():
+        pass
 
 # Process CSV and sending row to model:
-
-def process_csv(request):
-    if request.method == 'POST':
-        uploaded_file = request.FILES['csv_file']
+transaction_analyzer = TransactionAnalyzer
 
 
-        try:
-            decoded_file = uploaded_file.read().decode('utf-8').splitlines()
+class CSVProcessor(APIView):
+    def process_csv(request):
+        if request.method == 'POST':
+            uploaded_file = request.FILES['csv_file']
 
-            for transaction in csv.DictReader(decoded_file):
-                # send the row to model
-                analyze_data = analyze_transaction(transaction)
-                
-            return Response(
-                {"message": "CSV file has been processed successfully!"},
-            )
-        
-        except Exception as e:
-            return Response(
-                {"error": f"Error processing the CSV file: {str(e)}"},
-                status=status.HTTP_400_BAD_REQUEST,
+
+            try:
+                decoded_file = uploaded_file.read().decode('utf-8').splitlines()
+
+                for transaction in csv.DictReader(decoded_file):
+                    # send the row to model
+                    analyze_data = transaction_analyzer.analyze_transaction(transaction)
+                    
+                return Response(
+                    {"message": "CSV file has been processed successfully!"},
                 )
-        
-    return Response(
-        {"message": "Please upload a CSV file."},
-    )
+            
+            except Exception as e:
+                return Response(
+                    {"error": f"Error processing the CSV file: {str(e)}"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                    )
+            
+        return Response(
+            {"message": "Please upload a CSV file."},
+        )
+
+
 
