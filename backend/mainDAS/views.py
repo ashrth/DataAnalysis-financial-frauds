@@ -16,9 +16,6 @@ class TransactionAnalyzer(APIView):
     def analyze_transaction():
         pass
 
-    def save_result():
-        pass
-
 
 # Process CSV and sending row to model:
 transaction_analyzer = TransactionAnalyzer
@@ -39,6 +36,7 @@ class CSVProcessor(APIView):
                     # send the row to model
                     analyze_data = transaction_analyzer.analyze_transaction(
                         transaction)
+                    # store in db if fraud
 
                 return Response(
                     {"message": "CSV file has been processed successfully!"},
@@ -64,30 +62,32 @@ class TicketIssuer(viewsets.ViewSet):
         serializer = ViewTicketSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-    def create(self, request, clean_data):
+    def create(self, request):
+        data = request.data
         serializer = CreateTicketSerializer(data=request.data)
         if serializer.is_valid():
-            fraud_alert_obj = FraudAlert.objects.create(
-                fraud_account=clean_data['fraud_account'],
-                confirming_station=clean_data['confirming_station'],
-                details=clean_data['details'])
-            fraud_alert_obj.save()
+            serializer.create(data)
             return Response({'message': 'Ticket issued succesfully'},)
         return Response({'message': 'There was an error with ticket creation'}, status=status.HTTP_400_BAD_REQUEST)
-
 
     def retrieve(self, request, pk=None):
         queryset = FraudAlert.objects.all()
         ticket = get_object_or_404(queryset, pk=pk)
         serializer = ViewTicketSerializer(ticket)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
 
     def update(self, request, pk=None):
-        pass
+        ticket = FraudAlert.objects.get(pk=pk)
+        serializer = UpdateTicketSerializer(instance=ticket, data=request.data)
 
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Ticket updated successfully'},
+                            status=status.HTTP_200_OK)
 
+        return Response({'message': 'Updating failed'}, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
-        pass
+        ticket = get_object_or_404(FraudAlert, pk=pk)
+        ticket.delete()
+        return Response({'message': 'Ticket deleted successfully.'})

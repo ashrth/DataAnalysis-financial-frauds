@@ -7,6 +7,14 @@ class CreateTicketSerializer(serializers.ModelSerializer):
         model = FraudAlert
         fields = '__all__'
 
+        def create(self, clean_data):
+            fraud_alert_obj = FraudAlert.objects.create(
+                fraud_account=clean_data['fraud_account'],
+                confirming_station=clean_data['confirming_station'],
+                details=clean_data['details'])
+            fraud_alert_obj.save()
+            return fraud_alert_obj
+
 
 
 class UpdateTicketSerializer(serializers.ModelSerializer):
