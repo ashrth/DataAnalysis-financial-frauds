@@ -24,7 +24,9 @@ def bank_server(request):
         dummy_transactions = [generate_dummy_transaction() for _ in range(10)]
         for transaction in dummy_transactions:
             try:
+                
                 response = requests.post(backend_url, data=transaction)
+                
 
             except Exception as e:
                 print(f"Error processing dummy transaction: {str(e)}")
