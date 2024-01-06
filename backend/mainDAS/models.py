@@ -17,4 +17,5 @@ class FraudAlert(models.Model):
     fraud_account = models.CharField(max_length=50)
     confirming_station =  models.CharField(max_length=50)
     details = models.TextField()
+    status = models.CharField(max_length=10, default='Open')
     timestamp = models.DateTimeField(auto_now_add=True)
