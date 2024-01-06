@@ -14,19 +14,18 @@ def generate_dummy_transaction():
         'payment_failed': random.choice([True, False]),
         'forget_password': random.choice([True, False]),
         'KYC_incomplete': random.choice([True, False]),
-        'multiple_accounts': random.choice([True, False]),
+        'multiple_accounts': random.randint(1, 4),
     }
 
-
+print(generate_dummy_transaction())
 def bank_server(request):
     backend_url = 'http://127.0.0.1:8000/api/analyze-transaction'
     if request.method == 'POST':
         dummy_transactions = [generate_dummy_transaction() for _ in range(10)]
         for transaction in dummy_transactions:
             try:
-                
+
                 response = requests.post(backend_url, data=transaction)
-                
 
             except Exception as e:
                 print(f"Error processing dummy transaction: {str(e)}")
