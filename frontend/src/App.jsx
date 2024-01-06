@@ -9,6 +9,7 @@ import AppShell from './layout/Topbar';
 import { Suspense } from 'react';
 import { Spin, theme } from 'antd';
 import PageLayout from './layout/Sidebar';
+import TableDemo from './pages/Accounts'; 
 
 const { useToken } = theme
 
@@ -49,6 +50,7 @@ function App() {
             <Route path="/track-account/:id" element={<TrackAccount />} />
             <Route path="/CSV" element={<CSV />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/Account" element={<TableDemo />} />
             {/* <Route path="/bar" element={<Bar />} />
             <Route path="/pie" element={<Pie />} />
             <Route path="/line" element={<Line />} /> */}

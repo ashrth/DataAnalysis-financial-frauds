@@ -1,7 +1,5 @@
 /* eslint-disable react/prop-types */
 import clsx from "clsx";
-
-
 const Table = (({ className, ...props }, ref) => (
   <div className="relative w-full overflow-auto">
     <table

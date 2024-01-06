@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { PieChartOutlined, TeamOutlined } from '@ant-design/icons'
+import { PieChartOutlined, TeamOutlined ,AimOutlined} from '@ant-design/icons'
 import { Layout, Menu } from 'antd'
 import { Outlet, useNavigate } from 'react-router-dom'
 
@@ -17,7 +17,8 @@ function getItem(label, key, icon, children) {
 const items = [
   getItem('Wiseboard', 'wiseboard', <PieChartOutlined />),
   getItem('Wise Scheduler', 'scheduler'),
-  getItem('Accounts', 'redirect link', <TeamOutlined />),
+  getItem('Account', 'Account', <TeamOutlined />),
+  getItem('Map','Map',<AimOutlined />),
 ]
 
 export default function PageLayout() {
