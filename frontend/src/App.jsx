@@ -17,7 +17,7 @@ function App() {
   const { token } = useToken()
 
   return (
-    <div>
+    <div className='m-0 p-0'>
       <Routes>
         <Route
           element={
@@ -46,11 +46,11 @@ function App() {
             </AccountsProvider>
           }>
             <Route path="/" element={<Navigate to="/dashboard" />} />
-            <Route path="/chat" element={<Chat />} />
+            <Route path="/tickets" element={<Chat />} />
             <Route path="/track-account/:id" element={<TrackAccount />} />
             <Route path="/CSV" element={<CSV />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/Account" element={<TableDemo />} />
+            <Route path="/Accounts" element={<TableDemo />} />
             {/* <Route path="/bar" element={<Bar />} />
             <Route path="/pie" element={<Pie />} />
             <Route path="/line" element={<Line />} /> */}

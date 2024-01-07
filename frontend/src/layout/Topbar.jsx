@@ -5,20 +5,19 @@ import { useAuthContext } from '../hooks/useAuth'
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 
-function AppShell({ children, className, style }) {
-  const { user, logout } = useAuthContext()
+function AppShell({ children, className }) {
+  const { logout } = useAuthContext()
 
   return (
-    <div className={clsx('flex h-screen flex-col overflow-hidden',className)} style={style}>
-      <div className="h-16 border-b shadow-md">
-        <div className="flex mx-6 h-full items-center justify-between">
-          <div className="font-sans text-2xl tracking-wide text-primary">
-            <Link to="/wiseboard">
+    <div className={clsx('h-screen flex flex-col overflow-hidden',className)}>
+        <div className="flex flex-row items-center justify-between py-2 px-4">
+          <div className="font-sans text-2xl tracking-wide text-risingGreen">
+            <Link to="/dashboard">
               {/* <img src={logo} className="w-[150px]" /> */}
               Dashboard
             </Link>
           </div>
-          <div className="flex flex-row">
+          <div>
             <Dropdown
               trigger={['click']}
               menu={{
@@ -44,13 +43,12 @@ function AppShell({ children, className, style }) {
                     color: 'white',
                   }}
                 >
-                  {user?.fullName?.[0].toUpperCase()}
+                  K
                 </Avatar>
               </button>
             </Dropdown>
           </div>
         </div>
-      </div>
       <div className="flex-1 overflow-auto p-0">{children}</div>
     </div>
   )

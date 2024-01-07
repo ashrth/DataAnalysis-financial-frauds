@@ -99,7 +99,7 @@ export default function MoneyFlow({account}) {
   };
 
   return (
-    <div className="w-full text-center h-[500px] bg-secondary" ref={containerRef} >
+    <div className="w-full text-center h-[500px] bg-slate-200/50" ref={containerRef} >
       <Tree
         data={data}
         translate={translate}
