@@ -1,7 +1,7 @@
 from rest_framework import status, viewsets
 import csv
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from mainDAS.serializers import *
 from rest_framework.views import APIView
@@ -11,7 +11,7 @@ from rest_framework.response import Response
 # Analysing transactions:
 class TransactionAnalyzer(APIView):
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def analyze_transaction():
         pass
@@ -23,7 +23,7 @@ transaction_analyzer = TransactionAnalyzer
 
 class CSVProcessor(APIView):
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def process_csv(request):
         if request.method == 'POST':
@@ -55,7 +55,7 @@ class CSVProcessor(APIView):
 
 class TicketIssuer(viewsets.ViewSet):
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def list(self, request):
         queryset = FraudAlert.objects.all()

@@ -14,7 +14,6 @@ from dotenv import load_dotenv
 load_dotenv()
 # Create your views here.
 
-
 class RegisterView(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (AllowAny,)
@@ -67,7 +66,7 @@ class LoginView(APIView):
 
 class LogoutView(APIView):
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         user_token = request.COOKIES.get('token')

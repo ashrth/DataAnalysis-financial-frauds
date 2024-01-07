@@ -36,7 +36,6 @@ class LoginSerializer(serializers.ModelSerializer):
     def check_user(self, clean_data):
         user = authenticate(
             email=clean_data['email'], password=clean_data['password'])
-        print("from seriali", user)
         if not user:
             raise ValidationError('User not found')
         return user
