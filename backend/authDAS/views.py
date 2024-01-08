@@ -1,22 +1,29 @@
 from .validation import custom_validate, validate_password, validate_email
 from rest_framework.views import APIView
-from rest_framework.authentication import TokenAuthentication
+from django.contrib.auth import login
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework_simplejwt.tokens import RefreshToken
 from .utils import generate_tokens
 from .serializers import LoginSerializer, RegisterSerializer, UserSerializer
 from rest_framework import status
-import jwt
-import os
-from django.contrib.auth import get_user_model
 from dotenv import load_dotenv
 load_dotenv()
 # Create your views here.
 
+# {
+# "email":"ash@gmail.com",
+# "password":"ash123456"
+# { "email":"testuser@gmail.com","password":"ash123456"}
+# {"first_name":"test", "last_name":"user1", "email":"testuser1@gmail.com","password":"ash123456"}
+# }
+# {"email":"testuser2@gmail.com","password":"ash123456"}
+
+
 class RegisterView(APIView):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (AllowAny,)
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AllowAny]
 
     def post(self, request):
 
@@ -29,16 +36,14 @@ class RegisterView(APIView):
                 access_token = generate_tokens(user)
                 data = {'token': access_token}
                 response = Response(data, status=status.HTTP_201_CREATED)
-                response.set_cookie(
-                    key='token', value=access_token, httponly=True)
                 return response
 
         return Response({'message': 'Something went wrong while registering'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(APIView):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (AllowAny,)
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AllowAny]
 
     def post(self, request):
         data = request.data
@@ -48,13 +53,15 @@ class LoginView(APIView):
         if serializer.is_valid(raise_exception=True):
             user = serializer.check_user(data)
 
+            print(request.user)
+            print(request.user.is_anonymous)
+            print(request.user.is_authenticated)
             if user.is_active:
                 access_token = generate_tokens(user)
                 response = Response()
-                response.set_cookie(
-                    key='token', value=access_token, httponly=True)
                 response.data = {
-                    'token': access_token
+                    'token': access_token,
+                    'message': 'Login successful'
                 }
                 return response
 
@@ -65,39 +72,29 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        user_token = request.COOKIES.get('token')
+    def post(self, request):
+        try:
+            # Blacklist the refresh token, effectively logging out the user
+            refresh_token = request.data.get('token')
+            print(refresh_token)
+            RefreshToken(refresh_token).blacklist()
 
-        if user_token:
-            response = Response()
-            response.delete_cookie('token')
-            response.data = {
-                'message': "Logged out successfully."
-            }
-            return response
-        response = Response()
-        response.data = {
-            'message': "User is already logged out"
-        }
-
-        return response
+            return Response({'message': 'Logged out successfully.'})
+        except Exception as e:
+            return Response({'error': f'Error logging out: {str(e)}'}, status=500)
 
 
 class UserView(APIView):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (AllowAny,)
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user_token = request.COOKIES.get('token')
-        if not user_token:
-            raise AuthenticationFailed('Unauthenticated user.')
+        if request.user.is_authenticated:
+            serializer = UserSerializer(request.user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
 
-        payload = jwt.decode(
-            user_token, os.environ.get('JWT_SECRET_KEY'), algorithms=['HS256'])
-        UserModel = get_user_model()
-        user = UserModel.objects.filter(id=payload['id']).first()
-        serializer = UserSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+

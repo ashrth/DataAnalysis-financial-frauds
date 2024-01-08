@@ -1,7 +1,7 @@
 from rest_framework import status, viewsets
 import csv
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
 from mainDAS.serializers import *
 from rest_framework.views import APIView
@@ -10,10 +10,11 @@ from rest_framework.response import Response
 
 # Analysing transactions:
 class TransactionAnalyzer(APIView):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    authentication_classes=[JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    
 
-    def analyze_transaction():
+    def analyze_transaction(transaction):
         pass
 
 
@@ -22,10 +23,11 @@ transaction_analyzer = TransactionAnalyzer
 
 
 class CSVProcessor(APIView):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    authentication_classes=[JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    
 
-    def process_csv(request):
+    def post(self, request, *args, **kwargs):
         if request.method == 'POST':
             uploaded_file = request.FILES['csv_file']
 
@@ -37,6 +39,17 @@ class CSVProcessor(APIView):
                     analyze_data = transaction_analyzer.analyze_transaction(
                         transaction)
                     # store in db if fraud
+                    if analyze_data is not None:
+                        flagged_acc_obj = FlaggedAccount.objects.create(
+                            account_number=analyze_data['account'],
+                            available_credit=analyze_data['available_credit'],
+                            amount=float(analyze_data['amount']),
+                            KYC_incomplete=analyze_data['KYC_incomplete'],
+                            multiple_accounts=analyze_data['multiple_accounts'],
+                            transaction_category=analyze_data['transaction_category'])
+
+                        flagged_acc_obj.save()
+                        return Response({'message': 'Prediction has been stored.'}, status=status.HTTP_201_CREATED)
 
                 return Response(
                     {"message": "CSV file has been processed successfully!"},
@@ -53,9 +66,48 @@ class CSVProcessor(APIView):
         )
 
 
+class RealTimeTransactionProcessor(APIView):
+    authentication_classes=[JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            transaction = request.data
+            print(transaction, "here")
+
+            try:
+                analyze_data = transaction_analyzer.analyze_transaction(
+                    transaction)
+                # store in db if fraud
+                if analyze_data is not None:
+                    flagged_acc_obj = FlaggedAccount.objects.create(
+                        account_number=analyze_data['account'],
+                        available_credit=analyze_data['available_credit'],
+                        amount=float(analyze_data['amount']),
+                        KYC_incomplete=analyze_data['KYC_incomplete'],
+                        multiple_accounts=analyze_data['multiple_accounts'],
+                        transaction_category=analyze_data['transaction_category'])
+                    flagged_acc_obj.save()
+                    return Response({'message': 'Prediction has been stored.'}, status=status.HTTP_201_CREATED)
+
+                return Response(
+                    {"message": "Transactions have been processed successfully!"},
+                )
+
+            except Exception as e:
+                return Response(
+                    {"error": f"Error processing the transactions: {str(e)}"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+        return Response(
+            {"message": "Please wait for the upcoming transactions."},
+        )
+
+
 class TicketIssuer(viewsets.ViewSet):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    authentication_classes=[JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def list(self, request):
         queryset = FraudAlert.objects.all()
