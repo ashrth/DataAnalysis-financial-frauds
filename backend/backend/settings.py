@@ -30,7 +30,8 @@ SECRET_KEY = 'django-insecure-jet(u6=y1oefa!3&e7%0eim7ck4@=i$!txlr3hi%(@5mnb8e@y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ['.vercel.app', '.now.sh']
+
 
 
 # Application definition
@@ -112,8 +113,13 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / "db.sqlite3",
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / "db.sqlite3",
+
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': 'RJPOLICE_DAS',
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
     }
 }
 
@@ -198,3 +204,6 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': 600,  # 10 minutes in seconds
     },
 }
+
+STATICFILES_DIRS = [BASE_DIR/'static',]
+STATIC_ROOT = BASE_DIR/'staticfiles'
