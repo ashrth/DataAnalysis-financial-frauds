@@ -204,5 +204,5 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
-STATICFILES_DIRS = [BASE_DIR/'static',]
-STATIC_ROOT = BASE_DIR/'staticfiles'
+# STATICFILES_DIRS = [BASE_DIR/'static',]
+# STATIC_ROOT = BASE_DIR/'staticfiles'
