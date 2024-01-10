@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
+import environ
+env = environ.Env()
+environ.Env.read_env()
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -28,9 +31,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-jet(u6=y1oefa!3&e7%0eim7ck4@=i$!txlr3hi%(@5mnb8e@y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['.vercel.app', '.now.sh']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -104,22 +107,30 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.app'
+WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / "db.sqlite3",
+# DATABASES = {
+#     'default': {
+#         # 'ENGINE': 'django.db.backends.sqlite3',
+#         # 'NAME': BASE_DIR / "db.sqlite3",
 
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DATABASE_NAME'),
-        'USER': 'RJPOLICE_DAS',
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-    }
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('DATABASE_NAME'),
+#         'USER': 'RJPOLICE_DAS',
+#         'PASSWORD': os.environ.get('DB_PASSWORD'),
+
+
+#     }
+# }
+
+import dj_database_url
+
+DATABASES={
+    'default': dj_database_url.parse(env('DATABASE_URL'))
 }
 
 # DATABASES = {
@@ -204,5 +215,4 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
-# STATICFILES_DIRS = [BASE_DIR/'static',]
-# STATIC_ROOT = BASE_DIR/'staticfiles'
+
