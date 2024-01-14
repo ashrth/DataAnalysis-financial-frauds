@@ -27,3 +27,9 @@ class ViewTicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = FraudAlert
         fields = '__all__'
+
+
+class FlaggedAccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FlaggedAccount
+        fields = '__all__'

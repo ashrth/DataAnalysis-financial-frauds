@@ -20,6 +20,12 @@ load_dotenv()
 # }
 # {"email":"testuser2@gmail.com","password":"ash123456"}
 
+# {"account_number": "1234567895600", "available_credit": 643.97, 
+# "amount": 280.85, "transaction_category": "electronic", 
+# "day": 19, "time": "01:42:32", "payment_failed": "False", 
+# "forget_password": "False", 
+# "KYC_incomplete": "True", "multiple_accounts": 2}
+
 
 class RegisterView(APIView):
     authentication_classes = [JWTAuthentication]

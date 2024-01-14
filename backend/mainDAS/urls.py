@@ -4,8 +4,8 @@ from mainDAS.bankserver import BankServerView
 
 urlpatterns = [
     path('process-csv/', CSVProcessor.as_view(), name='process-csv'),
-    path('analyze-transaction/', TransactionAnalyzer.as_view(),
-         name='analyze-transaction'),
+    # path('analyze-transaction/', TransactionAnalyzer.as_view(),
+    #      name='analyze-transaction'),
     path('process-real-time-transactions/', RealTimeTransactionProcessor.as_view(),
          name='process-real-time-transactions'),
     path('bank-server/', BankServerView.as_view(), name='bank-server'),
