@@ -12,16 +12,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 
-
 # Analysing transactions:
 class TransactionAnalyzer:
-    authentication_classes=[JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-
-
+    # authentication_classes=[JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     def preprocess(self, transaction):
-        
+
         # Assuming json to be the dummy transaction
         d = {
             'LX': 2, 'auto': 3, 'apparel': 4, 'deal': 5, 'recrea': 6,
@@ -29,7 +26,6 @@ class TransactionAnalyzer:
             'internet': 13, 'international': 14, 'fashion': 15, 'electronic': 16, 'health': 17
         }
 
-        
         input = [0 for _ in range(29)]
 
         input[0] = transaction['available_credit']
@@ -56,30 +52,27 @@ class TransactionAnalyzer:
             input[28] = 1
 
         return [[input]]
-    
 
-    def analyze_transaction(self,transaction):
+    def analyze_transaction(self, transaction):
 
         # sys.modules['final_model'] = final_model
-        
+
         try:
-            with open(os.path.join('./model/final_model.pkl'), 'rb') as fileobj:
+            with open('./model/model_pickle', 'rb') as fileobj:
                 best_model_RF_3_3 = pickle.load(fileobj)
                 # preprocessing
-                preprocess_transaction= self.preprocess(transaction)
+                preprocess_transaction = self.preprocess(transaction)
                 # analyzing
                 result = best_model_RF_3_3.predict(preprocess_transaction)
                 # returning result
                 if result == 1:
                     return result
                 else:
-                    return Response({'message':'No fraud found.'})
+                    return Response({'message': 'No fraud found.'})
         except FileNotFoundError:
             print(f"Error: Model file not found at the path.")
         except Exception as e:
             print(f"Error loading the model: {e}")
-        
-        
 
 
 # Process CSV and sending row to model:
@@ -87,9 +80,8 @@ transaction_analyzer = TransactionAnalyzer()
 
 
 class CSVProcessor(APIView):
-    authentication_classes=[JWTAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    
 
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
@@ -114,7 +106,7 @@ class CSVProcessor(APIView):
 
                         flagged_acc_obj.save()
                         return Response({'message': 'Prediction has been stored.'}, status=status.HTTP_201_CREATED)
-                    
+
                 return Response(
                     {"message": "CSV file has been processed successfully!"},
                 )
@@ -131,9 +123,9 @@ class CSVProcessor(APIView):
 
 
 class RealTimeTransactionProcessor(APIView):
-    authentication_classes=[JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-    
+    # authentication_classes=[JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
             transaction = request.data
@@ -153,7 +145,7 @@ class RealTimeTransactionProcessor(APIView):
                         transaction_category=analyze_data['transaction_category'])
                     flagged_acc_obj.save()
                     return Response({'message': 'Prediction has been stored.'}, status=status.HTTP_201_CREATED)
-                
+
                 # return Response(
                 #     {"message": "No fraud found in real time transactions."},
                 # )
@@ -170,7 +162,7 @@ class RealTimeTransactionProcessor(APIView):
 
 
 class TicketIssuer(viewsets.ViewSet):
-    authentication_classes=[JWTAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def list(self, request):
