@@ -2,7 +2,7 @@ import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import TrackAccount from './pages/track-account';
 import CSV from './pages/CSV';
 import Dashboard from "./pages/dashboard";
-import Chat from './pages/chat';
+import Tickets from './pages/tickets';
 import { AccountsProvider } from './hooks/useAccounts';
 import AuthProtection from './components/auth-protection/auth-protection';
 import AppShell from './layout/Topbar';
@@ -46,7 +46,7 @@ function App() {
             </AccountsProvider>
           }>
             <Route path="/" element={<Navigate to="/dashboard" />} />
-            <Route path="/tickets" element={<Chat />} />
+            <Route path="/tickets" element={<Tickets />} />
             <Route path="/track-account/:id" element={<TrackAccount />} />
             <Route path="/CSV" element={<CSV />} />
             <Route path="/dashboard" element={<Dashboard />} />

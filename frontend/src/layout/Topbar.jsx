@@ -2,6 +2,7 @@
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Dropdown } from 'antd'
 import { useAuthContext } from '../hooks/useAuth'
+import logo from '../assets/images/logo.png';
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 
@@ -11,11 +12,11 @@ function AppShell({ children, className }) {
   return (
     <div className={clsx('h-screen flex flex-col overflow-hidden',className)}>
         <div className="flex flex-row items-center justify-between py-2 px-4">
-          <div className="font-sans text-2xl tracking-wide text-risingGreen">
+          <div className="font-sans text-2xl flex tracking-wide text-risingGreen">
             <Link to="/dashboard">
-              {/* <img src={logo} className="w-[150px]" /> */}
-              Dashboard
+              <img src={logo} className="w-[50px]" />
             </Link>
+            <p className='font-bold text-[20px] my-auto ml-5'>TRANSACTIONS</p>
           </div>
           <div>
             <Dropdown
