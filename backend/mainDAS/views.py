@@ -51,21 +51,21 @@ class TransactionAnalyzer:
         if transaction['multiple_accounts'] >= 4:
             input[28] = 1
 
-        return [[input]]
+        return [input]
 
     def analyze_transaction(self, transaction):
 
         # sys.modules['final_model'] = final_model
 
         try:
-            with open('./model/model_pickle', 'rb') as fileobj:
+            with open('model_pickle', 'rb') as fileobj:
                 best_model_RF_3_3 = pickle.load(fileobj)
                 # preprocessing
                 preprocess_transaction = self.preprocess(transaction)
                 # analyzing
                 result = best_model_RF_3_3.predict(preprocess_transaction)
                 # returning result
-                if result == 1:
+                if result[0] == 1:
                     return result
                 else:
                     return Response({'message': 'No fraud found.'})
