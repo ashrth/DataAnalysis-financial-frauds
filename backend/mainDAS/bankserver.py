@@ -24,17 +24,19 @@ class BankServerView(APIView):
     def post(self, request, *args, **kwargs):
 
         if request.method == 'POST':
-            dummy_transactions = [self.generate_dummy_transaction()
-                                  for _ in range(10)]
-            for transaction in dummy_transactions:
-                try:
-                    print(transaction)
-                    response = requests.post(
-                        self.backend_url, data=transaction)
+            dummy_transactions = self.generate_dummy_transaction()
+                                  
+            try:
+                response = requests.post(self.backend_url, json= dummy_transactions)
+                if response.status_code == 201:
+                    return Response({'message': 'Webhook successfully sent', 'response': response.text})
+                else:
+                    return Response({'error': 'Webhook failed', 'response': response.text})
+       
 
-                except Exception as e:
+            except Exception as e:
                     print(f"Error processing dummy transaction: {str(e)}")
 
-            return Response({'message': 'Transaction sent successfully', 'response': response.text})
+            
 
         return Response({'error': 'Invalid request method'})
