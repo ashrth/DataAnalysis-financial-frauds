@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 from mainDAS.serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from mainDAS.bankserver import BankServerView
 
 
 # Analysing transactions:
@@ -123,12 +124,13 @@ class CSVProcessor(APIView):
 
 
 class RealTimeTransactionProcessor(APIView):
-    authentication_classes=[JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes=[JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
-            transaction = request.data
+            bank_server_instance = BankServerView()
+            transaction = bank_server_instance.generate_dummy_transaction()
             print(transaction, "here")
 
             try:
