@@ -14,8 +14,8 @@ from rest_framework.response import Response
 
 # Analysing transactions:
 class TransactionAnalyzer:
-    # authentication_classes=[JWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes=[JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def preprocess(self, transaction):
 
@@ -123,8 +123,8 @@ class CSVProcessor(APIView):
 
 
 class RealTimeTransactionProcessor(APIView):
-    # authentication_classes=[JWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes=[JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
