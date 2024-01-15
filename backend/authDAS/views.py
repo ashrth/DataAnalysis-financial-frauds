@@ -17,7 +17,7 @@ load_dotenv()
 # "password":"ash123456"
 # { "email":"testuser@gmail.com","password":"ash123456"}
 # {"first_name":"test", "last_name":"user1", "email":"testuser1@gmail.com","password":"ash123456"}
-# }
+# } https://rjpolice-police-das.onrender.com/api/
 # {"email":"testuser2@gmail.com","password":"ash123456"}
 
 # {"account_number": "1234567895600", "available_credit": 643.97, 

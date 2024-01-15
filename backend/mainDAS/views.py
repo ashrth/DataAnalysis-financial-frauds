@@ -15,8 +15,8 @@ from mainDAS.bankserver import BankServerView
 
 # Analysing transactions:
 class TransactionAnalyzer:
-    authentication_classes=[JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes=[JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     def preprocess(self, transaction):
 
@@ -55,11 +55,11 @@ class TransactionAnalyzer:
         return [input]
 
     def analyze_transaction(self, transaction):
-
-        # sys.modules['final_model'] = final_model
-
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        pickle_file_path = os.path.join(current_directory, 'model_pickle')
+        
         try:
-            with open('model_pickle', 'rb') as fileobj:
+            with open(pickle_file_path, 'rb') as fileobj:
                 best_model_RF_3_3 = pickle.load(fileobj)
                 # preprocessing
                 preprocess_transaction = self.preprocess(transaction)
