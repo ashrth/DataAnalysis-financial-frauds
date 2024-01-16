@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CreditCardOutlined, FileTextOutlined, TeamOutlined, } from '@ant-design/icons'
+import { AreaChartOutlined, CreditCardOutlined, FileTextOutlined, TeamOutlined, } from '@ant-design/icons'
 import { Layout, Menu } from 'antd'
 import { Outlet, useNavigate } from 'react-router-dom'
 
@@ -18,6 +18,7 @@ const items = [
   getItem('CSV', 'csv', <FileTextOutlined />),
   getItem('Accounts', 'Accounts', <TeamOutlined />),
   getItem('Tickets', 'tickets', <CreditCardOutlined />),
+  getItem('Analysis', 'analysis', <AreaChartOutlined />),
   // getItem('Map','Map',<AimOutlined />),
 ]
 

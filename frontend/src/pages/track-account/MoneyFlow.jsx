@@ -8,25 +8,35 @@ function getInitialDummyData (account){
 	
 const initialData = {
   name: account.name,
+  fraudProb: 80,
+  moneyTransferred: 50000,
   children: [
     {
       name: getRandomName(),
-
+      fraudProb: 70,
+      moneyTransferred: 40000,
       children: [
         {
           name: getRandomName(),
+          fraudProb: 30,
+          moneyTransferred: 5000,
           children: [
             {
               name: getRandomName(),
+              fraudProb: 20,
+              moneyTransferred: 2000,
             },
           ],
         },
         {
           name: getRandomName(),
-    
+          fraudProb: 60,
+          moneyTransferred:30000 ,
           children: [
             {
               name: getRandomName(),
+              fraudProb: 80,
+              moneyTransferred: 30000,
             },
           ],
         },
@@ -43,6 +53,8 @@ const apiChildrenPayload = [
     children: [
       {
         name: getRandomName(),
+        fraudProb: 65,
+        moneyTransferred: 10000
       },
     ],
   },
@@ -51,6 +63,8 @@ const apiChildrenPayload = [
     children: [
       {
         name: getRandomName(),
+        fraudProb: 70,
+        moneyTransferred: 20000
       },
     ],
   },
@@ -87,12 +101,17 @@ export default function MoneyFlow({account}) {
 
 	const renderRectSvgNode = (customProps) => {
     const { nodeDatum, toggleNode } = customProps;
-		const nodeColor = (nodeDatum.children?.length)? "#006d77": "#777";
+		let nodeColor = 'green';
+    if(nodeDatum.fraudProb>50)nodeColor = 'orange';
+    if(nodeDatum.fraudProb>70)nodeColor = 'red';
+
     return (
       <g>
         <circle r="15" fill={nodeColor} onClick={toggleNode} />
         <text fill="black" strokeWidth="0.5" x="20" y="-5">
-          {nodeDatum.name}
+          <tspan x="20" dy="1.2em">name: {nodeDatum.name}</tspan>
+          <tspan x="20" dy="1.2em">fraud probability: {nodeDatum.fraudProb}</tspan>
+          <tspan x="20" dy="1.2em">money transferred: {nodeDatum.moneyTransferred}</tspan>
         </text>
       </g>
     );

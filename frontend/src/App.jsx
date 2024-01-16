@@ -10,6 +10,7 @@ import { Suspense } from 'react';
 import { Spin, theme } from 'antd';
 import PageLayout from './layout/Sidebar';
 import TableDemo from './pages/Accounts'; 
+import TableauDashboard from './pages/analysis';
 
 const { useToken } = theme
 
@@ -51,6 +52,7 @@ function App() {
             <Route path="/CSV" element={<CSV />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/Accounts" element={<TableDemo />} />
+            <Route path="/analysis" element={<TableauDashboard />} />
             {/* <Route path="/bar" element={<Bar />} />
             <Route path="/pie" element={<Pie />} />
             <Route path="/line" element={<Line />} /> */}
