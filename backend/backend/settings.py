@@ -195,7 +195,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'authDAS.User'
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ALGORITHM": "HS256",
     "SIGNING_KEY": os.environ.get('JWT_SECRET_KEY'),
@@ -205,14 +205,5 @@ SIMPLE_JWT = {
 }
 
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-
-CELERY_BEAT_SCHEDULE = {
-    'process_real_time_transactions': {
-        'task': 'your_app.tasks.process_real_time_transactions',
-        'schedule': 600,  # 10 minutes in seconds
-    },
-}
 
 
