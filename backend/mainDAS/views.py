@@ -1,8 +1,6 @@
 from rest_framework import status, viewsets
 import csv
-import joblib
 import os
-from pathlib import Path
 import pickle
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -49,7 +47,7 @@ class TransactionAnalyzer:
             input[26] = 1
         if transaction['KYC_incomplete']:
             input[27] = 1
-        if transaction['multiple_accounts'] >= 4:
+        if transaction['multiple_accounts']:
             input[28] = 1
 
         return [input]
@@ -63,10 +61,11 @@ class TransactionAnalyzer:
                 best_model_RF_3_3 = pickle.load(fileobj)
                 # preprocessing
                 preprocess_transaction = self.preprocess(transaction)
-                
+                print(preprocess_transaction)
+
                 # analyzing
                 result = best_model_RF_3_3.predict(preprocess_transaction)
-                
+
                 # returning result
                 if result[0] == 1:
                     return 1
@@ -96,9 +95,24 @@ class CSVProcessor(APIView):
 
                 for transaction in csv.DictReader(decoded_file):
                     # send the row to model
+
+                    transaction['available_credit'] = float(
+                        transaction['available_credit'])
+                    transaction['amount'] = float(transaction['amount'])
+                    transaction['day'] = int(transaction['day'])
+                    transaction['payment_failed'] = bool(
+                        transaction['payment_failed'])
+                    transaction['forget_password'] = bool(
+                        transaction['forget_password'])
+                    transaction['KYC_incomplete'] = bool(
+                        transaction['KYC_incomplete'])
+                    transaction['multiple_accounts'] = bool(
+                        transaction['multiple_accounts'])
+                    print(transaction)
+
                     analyze_data = transaction_analyzer.analyze_transaction(
                         transaction)
-                    
+
                     # store in db if fraud
                     if analyze_data == 1:
                         flagged_acc_obj = FlaggedAccount.objects.create(
@@ -142,7 +156,7 @@ class RealTimeTransactionProcessor(APIView):
             try:
                 analyze_data = transaction_analyzer.analyze_transaction(
                     transaction)
-                
+
                 # store in db if fraud
                 if analyze_data == 1:
                     flagged_acc_obj = FlaggedAccount.objects.create(
