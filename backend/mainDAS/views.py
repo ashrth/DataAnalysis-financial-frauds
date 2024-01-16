@@ -15,8 +15,8 @@ from mainDAS.bankserver import BankServerView
 
 # Analysing transactions:
 class TransactionAnalyzer:
-    # authentication_classes=[JWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes=[JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def preprocess(self, transaction):
 
@@ -57,19 +57,21 @@ class TransactionAnalyzer:
     def analyze_transaction(self, transaction):
         current_directory = os.path.dirname(os.path.abspath(__file__))
         pickle_file_path = os.path.join(current_directory, 'model_pickle')
-        
+
         try:
             with open(pickle_file_path, 'rb') as fileobj:
                 best_model_RF_3_3 = pickle.load(fileobj)
                 # preprocessing
                 preprocess_transaction = self.preprocess(transaction)
+                
                 # analyzing
                 result = best_model_RF_3_3.predict(preprocess_transaction)
+                
                 # returning result
                 if result[0] == 1:
-                    return result
+                    return 1
                 else:
-                    return Response({'message': 'No fraud found.'})
+                    return 0
         except FileNotFoundError:
             print(f"Error: Model file not found at the path.")
         except Exception as e:
@@ -90,27 +92,31 @@ class CSVProcessor(APIView):
 
             try:
                 decoded_file = uploaded_file.read().decode('utf-8').splitlines()
+                fraud_count = 0
 
                 for transaction in csv.DictReader(decoded_file):
                     # send the row to model
                     analyze_data = transaction_analyzer.analyze_transaction(
                         transaction)
+                    
                     # store in db if fraud
-                    if analyze_data:
+                    if analyze_data == 1:
                         flagged_acc_obj = FlaggedAccount.objects.create(
-                            account_number=analyze_data['account'],
-                            available_credit=analyze_data['available_credit'],
-                            amount=float(analyze_data['amount']),
-                            KYC_incomplete=analyze_data['KYC_incomplete'],
-                            multiple_accounts=analyze_data['multiple_accounts'],
-                            transaction_category=analyze_data['transaction_category'])
+                            account_number=transaction['account_number'],
+                            available_credit=transaction['available_credit'],
+                            amount=float(transaction['amount']),
+                            KYC_incomplete=transaction['KYC_incomplete'],
+                            multiple_accounts=transaction['multiple_accounts'],
+                            transaction_category=transaction['transaction_category'])
 
                         flagged_acc_obj.save()
-                        return Response({'message': 'Prediction has been stored.'}, status=status.HTTP_201_CREATED)
+                        fraud_count += 1
+                        return Response({'message': f'Predictions have been stored. {fraud_count} frauds detected.'}, status=status.HTTP_201_CREATED)
+                    else:
 
-                return Response(
-                    {"message": "CSV file has been processed successfully!"},
-                )
+                        return Response(
+                            {"message": "CSV was processed, and no frauds were deteced."},
+                        )
 
             except Exception as e:
                 return Response(
@@ -124,8 +130,8 @@ class CSVProcessor(APIView):
 
 
 class RealTimeTransactionProcessor(APIView):
-    # authentication_classes=[JWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes=[JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
@@ -136,21 +142,23 @@ class RealTimeTransactionProcessor(APIView):
             try:
                 analyze_data = transaction_analyzer.analyze_transaction(
                     transaction)
+                
                 # store in db if fraud
-                if analyze_data:
+                if analyze_data == 1:
                     flagged_acc_obj = FlaggedAccount.objects.create(
-                        account_number=analyze_data['account'],
-                        available_credit=analyze_data['available_credit'],
-                        amount=float(analyze_data['amount']),
-                        KYC_incomplete=analyze_data['KYC_incomplete'],
-                        multiple_accounts=analyze_data['multiple_accounts'],
-                        transaction_category=analyze_data['transaction_category'])
+                        account_number=transaction['account_number'],
+                        available_credit=transaction['available_credit'],
+                        amount=float(transaction['amount']),
+                        KYC_incomplete=transaction['KYC_incomplete'],
+                        multiple_accounts=transaction['multiple_accounts'],
+                        transaction_category=transaction['transaction_category'])
                     flagged_acc_obj.save()
                     return Response({'message': 'Prediction has been stored.'}, status=status.HTTP_201_CREATED)
 
-                # return Response(
-                #     {"message": "No fraud found in real time transactions."},
-                # )
+                else:
+                    return Response(
+                        {"message": "No fraud found in real time transactions."},
+                    )
 
             except Exception as e:
                 return Response(
