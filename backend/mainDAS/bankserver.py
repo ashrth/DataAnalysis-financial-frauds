@@ -18,7 +18,7 @@ class BankServerView(APIView):
             "payment_failed": random.choice([True, False]),
             "forget_password": random.choice([True, False]),
             "KYC_incomplete": random.choice([True, False]),
-            "multiple_accounts": random.randint(1, 4),
+            "multiple_accounts": random.choice([True, False]),
         }
 
     # def post(self, request, *args, **kwargs):
