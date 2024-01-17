@@ -13,6 +13,8 @@ urlpatterns = [
         {'get': 'list', 'post': 'create'}), name='ticket'),
     path('ticket-actions/<int:pk>/', TicketIssuer.as_view(
         {'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='ticket-actions'),
+    path('view-flagged-accounts/', FlaggedAccountView.as_view(),
+         name='view-flagged-accounts'),
 
 
 

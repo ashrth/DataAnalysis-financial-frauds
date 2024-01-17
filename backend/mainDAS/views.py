@@ -223,3 +223,13 @@ class TicketIssuer(viewsets.ViewSet):
         ticket = get_object_or_404(FraudAlert, pk=pk)
         ticket.delete()
         return Response({'message': 'Ticket deleted successfully.'})
+
+
+class FlaggedAccountView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        queryset = FlaggedAccount.objects.all()
+        serializer = FlaggedAccountSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
