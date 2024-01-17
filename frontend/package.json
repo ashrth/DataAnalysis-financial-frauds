@@ -37,6 +37,7 @@
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-d3-tree": "^3.6.1",
+    "react-datamaps-india": "^0.6.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.1",
     "styled-components": "^6.1.3",

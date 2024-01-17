@@ -65,8 +65,7 @@ const columns = [
     key: 'action',
     render: (_, record) => (
       <Space size="middle">
-        <a>click here to view {record.name}</a>
-
+        <Link to="/track-account">analyze</Link>
       </Space>
     ),
   },
@@ -74,7 +73,7 @@ const columns = [
 const data = [
   {
     key: '1',
-    name: 'abdul khan',
+    name: 'abdul',
     age: 32,
     pan :'ATX34344343',
     address: '-',
