@@ -16,8 +16,8 @@ from twilio.rest import Client
 
 # Analysing transactions:
 class TransactionAnalyzer:
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     def preprocess(self, transaction):
 
@@ -85,8 +85,8 @@ transaction_analyzer = TransactionAnalyzer()
 
 
 class CSVProcessor(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
@@ -147,8 +147,8 @@ class CSVProcessor(APIView):
 
 
 class RealTimeTransactionProcessor(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
@@ -189,8 +189,8 @@ class RealTimeTransactionProcessor(APIView):
 
 
 class TicketIssuer(viewsets.ViewSet):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     def list(self, request):
         queryset = FraudAlert.objects.all()
@@ -229,8 +229,8 @@ class TicketIssuer(viewsets.ViewSet):
 
 
 class FlaggedAccountView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     def list(self, request):
         queryset = FlaggedAccount.objects.all()
@@ -242,8 +242,8 @@ class FlaggedAccountView(APIView):
 
 
 class Broadcast(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     def post(self, request):
         try:

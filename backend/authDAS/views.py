@@ -15,8 +15,8 @@ load_dotenv()
 
 
 class RegisterView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [AllowAny]
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [AllowAny]
 
     def post(self, request):
 
@@ -35,8 +35,8 @@ class RegisterView(APIView):
 
 
 class LoginView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [AllowAny]
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [AllowAny]
 
     def post(self, request):
         data = request.data
@@ -67,8 +67,8 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [AllowAny]
 
     def post(self, request):
         try:
@@ -83,8 +83,8 @@ class LogoutView(APIView):
 
 
 class UserView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [AllowAny]
 
     def get(self, request):
         if request.user.is_authenticated:
