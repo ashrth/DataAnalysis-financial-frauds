@@ -9,6 +9,7 @@ from .utils import generate_tokens
 from .serializers import LoginSerializer, RegisterSerializer, UserSerializer
 from rest_framework import status
 from dotenv import load_dotenv
+from authDAS.models import User
 load_dotenv()
 # Create your views here.
 
@@ -87,9 +88,10 @@ class UserView(APIView):
     # permission_classes = [AllowAny]
 
     def get(self, request):
-        if request.user.is_authenticated:
-            serializer = UserSerializer(request.user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        # if request.user.is_authenticated:
+        queryset = User.objects.all()
+        serializer = UserSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
         
 
 
