@@ -4,7 +4,7 @@ from django.contrib.auth import login
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
+# from rest_framework_simplejwt.tokens import RefreshToken
 from .utils import generate_tokens
 from .serializers import LoginSerializer, RegisterSerializer, UserSerializer
 from rest_framework import status
@@ -45,6 +45,8 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.check_user(data)
+            # added the below line to debug the anonyous user error
+            request.user = user 
 
             print(request.user)
             print(request.user.is_anonymous)
@@ -72,8 +74,8 @@ class LogoutView(APIView):
         try:
             # Blacklist the refresh token, effectively logging out the user
             refresh_token = request.data.get('token')
-            print(refresh_token)
-            RefreshToken(refresh_token).blacklist()
+            # print(refresh_token)
+            # RefreshToken(refresh_token).blacklist()
 
             return Response({'message': 'Logged out successfully.'})
         except Exception as e:

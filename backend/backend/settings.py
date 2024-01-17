@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_extensions',
     'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist',
+    # 'rest_framework_simplejwt.token_blacklist',
 
 
 ]
@@ -201,7 +201,7 @@ SIMPLE_JWT = {
     "SIGNING_KEY": os.environ.get('JWT_SECRET_KEY'),
     "AUTH_HEADER_TYPES": ("Bearer",),
     'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION': True,
+    # 'BLACKLIST_AFTER_ROTATION': True,
 }
 
 
