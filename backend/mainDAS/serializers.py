@@ -33,3 +33,7 @@ class FlaggedAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = FlaggedAccount
         fields = '__all__'
+
+
+class BroadcastMessageSerializer(serializers.Serializer):
+    content = serializers.CharField()

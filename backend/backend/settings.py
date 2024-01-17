@@ -10,13 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import dj_database_url
+from dotenv import load_dotenv
 from pathlib import Path
 from datetime import timedelta
 import os
 import environ
 env = environ.Env()
 environ.Env.read_env()
-from dotenv import load_dotenv
 load_dotenv()
 
 
@@ -127,9 +128,8 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 #     }
 # }
 
-import dj_database_url
 
-DATABASES={
+DATABASES = {
     'default': dj_database_url.parse(env('DATABASE_URL'))
 }
 
@@ -205,5 +205,10 @@ SIMPLE_JWT = {
 }
 
 
+SMS_BROADCAST_TO_NUMBERS = [
+    '+918005733545',
+    '+917008290354',
+    '+919784266338',
+    
 
-
+]

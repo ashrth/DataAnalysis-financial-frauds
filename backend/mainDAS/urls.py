@@ -15,6 +15,8 @@ urlpatterns = [
         {'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='ticket-actions'),
     path('view-flagged-accounts/', FlaggedAccountView.as_view(),
          name='view-flagged-accounts'),
+    path('send-broadcast-message/', Broadcast.as_view(),
+         name='send-broadcast-message')
 
 
 

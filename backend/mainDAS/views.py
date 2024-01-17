@@ -9,11 +9,14 @@ from mainDAS.serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from mainDAS.bankserver import BankServerView
+from django.conf import settings
+from django.http import HttpResponse
+from twilio.rest import Client
 
 
 # Analysing transactions:
 class TransactionAnalyzer:
-    authentication_classes=[JWTAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def preprocess(self, transaction):
@@ -144,7 +147,7 @@ class CSVProcessor(APIView):
 
 
 class RealTimeTransactionProcessor(APIView):
-    authentication_classes=[JWTAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
@@ -233,3 +236,39 @@ class FlaggedAccountView(APIView):
         queryset = FlaggedAccount.objects.all()
         serializer = FlaggedAccountSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+
+
+class Broadcast(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            data = request.data
+
+            serializer = BroadcastMessageSerializer(data=data)
+            if serializer.is_valid():
+                message_to_broadcast = serializer.validated_data['content']
+                print(message_to_broadcast)
+
+                account_sid = os.environ.get('TWILIO_SID')
+                print(account_sid)
+                auth_token = os.environ.get('TWILIO_TOKEN')
+                client = Client(account_sid, auth_token)
+                for recipient in settings.SMS_BROADCAST_TO_NUMBERS:
+                    if recipient:
+                        print(recipient)
+                        client.messages.create(to=recipient,
+                                               from_=os.environ.get(
+                                                   'TWILIO_NUMBER'),
+                                               body=message_to_broadcast)
+                    return Response({"message": "messages sent!"}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response(
+                {"error": f"Error sending the braodcast message: {str(e)}"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
