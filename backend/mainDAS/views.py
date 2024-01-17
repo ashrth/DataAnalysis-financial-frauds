@@ -232,7 +232,7 @@ class FlaggedAccountView(APIView):
     # authentication_classes = [JWTAuthentication]
     # permission_classes = [IsAuthenticated]
 
-    def list(self, request):
+    def get(self, request):
         queryset = FlaggedAccount.objects.all()
         serializer = FlaggedAccountSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
