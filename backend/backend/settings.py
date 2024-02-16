@@ -206,7 +206,6 @@ SIMPLE_JWT = {
 
 
 SMS_BROADCAST_TO_NUMBERS = [
-    '+919784266338',
-
+   'hhh'
 
 ]
